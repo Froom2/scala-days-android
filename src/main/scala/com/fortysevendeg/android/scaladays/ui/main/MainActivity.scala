@@ -22,7 +22,6 @@ import android.os.{Handler, Bundle}
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.{AppCompatActivity, ActionBarDrawerToggle}
 import android.view.{Menu, MenuItem, View}
-import com.crashlytics.android.Crashlytics
 import com.fortysevendeg.android.scaladays.R
 import com.fortysevendeg.android.scaladays.ui.about.AboutFragment
 import com.fortysevendeg.android.scaladays.ui.places.PlacesFragment
@@ -38,7 +37,6 @@ import com.fortysevendeg.macroid.extras.DrawerLayoutTweaks._
 import com.fortysevendeg.macroid.extras.FragmentExtras._
 import com.fortysevendeg.macroid.extras.ToolbarTweaks._
 import com.localytics.android.{LocalyticsActivityLifecycleCallbacks, Localytics}
-import io.fabric.sdk.android.Fabric
 import macroid.FullDsl._
 import macroid._
 
@@ -58,8 +56,6 @@ class MainActivity
     getApplication.registerActivityLifecycleCallbacks(
       new LocalyticsActivityLifecycleCallbacks(this)
     )
-
-    startCrashlytics()
 
     Localytics.registerPush(getString(R.string.google_project_number))
 
@@ -141,16 +137,6 @@ class MainActivity
           id = Id.mainFragment,
           tag = Some(Tag.mainFragment))
     )
-  }
-
-  private[this] def startCrashlytics() = {
-    new Handler().post(new Runnable {
-      override def run(): Unit = try {
-        Fabric.`with`(self, new Crashlytics())
-      } catch {
-        case e: Throwable => e.printStackTrace()
-      }
-    })
   }
 
 }

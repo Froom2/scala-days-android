@@ -9,7 +9,6 @@ import Libraries.qr._
 import Libraries.playServices._
 import Libraries.debug._
 import Libraries.net._
-import Crashlytics._
 import ReplacePropertiesGenerator._
 import android.Keys._
 import android.PromptPasswordsSigningConfig
@@ -45,7 +44,6 @@ libraryDependencies ++= Seq(
   aar(playServicesBase),
   aar(playServicesMaps),
   okHttp,
-  crashlytics,
   playJson,
   specs2,
   mockito,
@@ -85,14 +83,8 @@ packagingOptions in Android := PackagingOptions(excludes = Seq(
 
 packageResources in Android <<= (packageResources in Android).dependsOn(replaceValuesTask)
 
-crashlyticsEnabled := (sys.env.getOrElse("CRASHLYTICS_ENABLED", default = "true") == "true")
-
-collectResources in Android <<= (collectResources in Android) dependsOn
-  fixNameSpace dependsOn
-  crashlyticsPreBuild dependsOn
-  createFiles
+collectResources in Android <<= (collectResources in Android)
 
 zipalign in Android <<= (zipalign in Android) map { result =>
-  crashlyticsPostPackage
   result
 }
